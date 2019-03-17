@@ -1,0 +1,43 @@
+title SPA-version avaus
+
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+
+
+palvelin-->selain: sivun HTML-koodi
+
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+
+
+palvelin-->selain: tyylitiedosto main.css
+
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+
+palvelin-->selain: Javascript tiedosto spa.js
+
+
+
+note over selain:
+
+selain alkaa suorittaa ladattua spa.js-koodia
+,
+joka pyytää muistiinpanot JSON-datana palvelimelta
+
+end note
+
+
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+
+
+palvelin-->selain: [{"content":"HTML on helppoa","date":"2017-12-10T17:30:31.098Z"},{"content":"Selain pystyy suorittamaan vain javascriptiä","date":"2017-12-10T18:39:34.091Z"},...]
+
+note over selain:
+
+selain suorittaa tapahtumankäsittelijän, 
+joka muokkaa ja 
+päivittää jsonina saadut muistiinpanotiedot näytölle
+
+end note
