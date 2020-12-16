@@ -1,23 +1,16 @@
-title SPA-muistiinpanon lisäys
-
-
+title SPA-muistiinpanon lisÃ¤ys
 
 note over selain:
-
-Käyttäjän painaessa Talleta-nappia, nappulaan liitetty tapahtumakäsittelijä 
-pävittää muistiinpanolistaan uuden muistiinpanon, päivittää listan näytölle ja
-lähettää uuden muistiinpanon tiedot JSON-datana palvelimelle tallennettaviksi
+KÃ¤yttÃ¤jÃ¤n painaessa Talleta-nappia, nappulaan liitetty tapahtumakÃ¤sittelijÃ¤ 
+pÃ¤vittÃ¤Ã¤ muistiinpanolistaan uuden muistiinpanon, pÃ¤ivittÃ¤Ã¤ listan nÃ¤ytÃ¶lle ja
+lÃ¤hettÃ¤Ã¤ uuden muistiinpanon tiedot JSON-datana palvelimelle tallennettaviksi
 end note
 
-
-
-selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
 
 note over palvelin: 
-palvelin noukkii muistiinpanon tiedot requestin bodyssa lähetetystä 
-json-merkkijonosta, ja lisää sen muistiinpanoihin
-
+palvelin noukkii muistiinpanon tiedot requestin bodyssa lÃ¤hetetystÃ¤ 
+json-merkkijonosta, ja lisÃ¤Ã¤ sen muistiinpanoihin
 end note
-
 
 palvelin-->selain: HTTP Status Code 201 {"message":"note created"}
