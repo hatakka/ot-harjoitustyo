@@ -29,7 +29,7 @@ const Analysis = ({stats, count}) => {
   if (!(count === 0)) {
     let sum = stats[0] + (-1 * stats[2])
     average = sum / count
-    positive = stats[0] / count
+    positive = stats[0] / count * 100.00
   }
   return (
     <>
@@ -45,6 +45,15 @@ const Statistics = ({stats}) => {
     total +=element
   });
  
+  if (total === 0) {
+    return (
+      <>
+       <Header text={'statistics'} />
+       <div>No feedback given</div>
+      </>
+    )
+  }
+
   return (
     <>
       <Header text={'statistics'} />
