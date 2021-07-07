@@ -8,9 +8,11 @@ const Header = (props) => {
   );
 }
 
-const State = ({type, count}) => {
+const StatisticLine = ({type, value}) => {
   return (
-    <div>{type} {count}</div>
+    <tr>
+      <td>{type}</td><td>{value}</td>
+    </tr>
   );
 }
 
@@ -33,14 +35,13 @@ const Analysis = ({stats, count}) => {
   }
   return (
     <>
-      <div>average {average}</div>
-      <div>positive {positive} %</div>
+      <StatisticLine type="average" value={average} />
+      <StatisticLine type="positive" value={positive + ' %'} />
     </>
   )
 }
 const Statistics = ({stats}) => {
   let total = 0
-  let value = 0
   stats.forEach(element => {
     total +=element
   });
@@ -57,11 +58,17 @@ const Statistics = ({stats}) => {
   return (
     <>
       <Header text={'statistics'} />
-      <State type="good" count={stats[0]} />
-      <State type="neutral" count={stats[1]} />
-      <State type="bad" count={stats[2]} />
-      <State type="all" count={total} />
-      <Analysis stats={stats} count={total} />
+      <div>
+        <table>
+          <tbody>
+            <StatisticLine type="good" value={stats[0]} />
+            <StatisticLine type="neutral" value={stats[1]} />
+            <StatisticLine type="bad" value={stats[2]} />
+            <StatisticLine type="all" value={total} />
+            <Analysis stats={stats} count={total} />
+         </tbody>
+        </table>
+      </div>
     </>
   )
 }
