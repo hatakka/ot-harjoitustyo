@@ -23,13 +23,36 @@ const Button = (props) => {
   )
 }
 
-const Statistics = (props) => {
+const Analysis = ({stats, count}) => {
+  let average = 0.00
+  let positive = 0.00
+  if (!(count === 0)) {
+    let sum = stats[0] + (-1 * stats[2])
+    average = sum / count
+    positive = stats[0] / count
+  }
+  return (
+    <>
+      <div>average {average}</div>
+      <div>positive {positive} %</div>
+    </>
+  )
+}
+const Statistics = ({stats}) => {
+  let total = 0
+  let value = 0
+  stats.forEach(element => {
+    total +=element
+  });
+ 
   return (
     <>
       <Header text={'statistics'} />
-      <State type="good" count={props.stats[0]} />
-      <State type="neutral" count={props.stats[1]} />
-      <State type="bad" count={props.stats[2]} />
+      <State type="good" count={stats[0]} />
+      <State type="neutral" count={stats[1]} />
+      <State type="bad" count={stats[2]} />
+      <State type="all" count={total} />
+      <Analysis stats={stats} count={total} />
     </>
   )
 }
