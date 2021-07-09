@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 const Button = (props) => {
   console.log(props)
   return (
-    <div>
+    <>
       <button onClick={props.handleClick}>
         {props.text}
       </button>
-    </div>
+    </>
   )
 }
 
@@ -24,6 +24,12 @@ const App = () => {
     
   const [selected, setSelected] = useState(0)
 
+  const [points, setVotes] = useState(new Array(anecdotes.length).fill(0))
+
+  const copy = { ...points }
+  // kasvatetaan olion kentän 2 arvoa yhdellä
+  copy[2] += 1   
+
   const seed = () => {
     return Math.floor(Math.random() * anecdotes.length);
   }
@@ -32,11 +38,22 @@ const App = () => {
      setSelected(seed)
   }
 
-  return (
+  const handleVote = (index) => {
+    const copy = [...points]
+// kasvatetaan taulukon paikan 2 arvoa yhdellä
+    copy[index] += 1
+    setVotes(copy)
+ }
+
+ return (
     <div>
       {anecdotes[selected]}
-      <button onClick={handleClick}></button>
-     <Button handleClick={() => handleClick()} text="next anecdote" />
+      <br/>
+      has {points[selected]} votes
+      <div>
+        <Button handleClick={() => handleVote(selected)} text="vote" />
+        <Button handleClick={() => handleClick()} text="next anecdote" />
+     </div>
    </div>
   )
 }
