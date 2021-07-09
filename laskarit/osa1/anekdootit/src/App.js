@@ -1,5 +1,35 @@
 import React, { useState } from 'react'
 
+const Header = (props) => {
+  return (
+    <div>
+      <h1>{props.text}</h1>
+    </div>
+  );
+}
+
+const Analysis = ({anecdotes, points}) => {
+  let maxInd = 0
+  let maxVotes = 0
+
+  points.forEach((value, index) => {
+    if (maxVotes  < value) {
+      maxInd = index
+      maxVotes = value
+    }
+
+  })
+
+  return (
+    <>
+     <Header text={'Anecdote with most votes'} />
+     {anecdotes[maxInd]}
+     <br/>
+      has {points[maxInd]} votes
+    </>
+  )
+}
+
 const Button = (props) => {
   console.log(props)
   return (
@@ -47,6 +77,7 @@ const App = () => {
 
  return (
     <div>
+      <Header text={'Anecdote of the day'} />
       {anecdotes[selected]}
       <br/>
       has {points[selected]} votes
@@ -54,6 +85,7 @@ const App = () => {
         <Button handleClick={() => handleVote(selected)} text="vote" />
         <Button handleClick={() => handleClick()} text="next anecdote" />
      </div>
+     <Analysis anecdotes={anecdotes} points={points} />
    </div>
   )
 }
