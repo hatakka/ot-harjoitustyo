@@ -10,35 +10,37 @@ const Header = ({name}) => {
 }
   
 const Content = ({parts}) => {
-    console.log(parts);
-
-    return(
-      <>
-       <ul>
+ 
+   return(
+      <div>
         {parts.map(part =>
             <Part part={part} />
         )}
-      </ul>
-    </>
+    </div>
   )
 }
  
 const Part = ({part}) => {
     return(
       <>
-        <br/>{part.name} {part.exercises}
+        <p>{part.name} {part.exercises}</p>
       </>
     );
   }
   
-const Total = (props) => {
+const Total = ({parts}) => {
+    const totalCount = parts.reduce(
+        (previousValue, currentValue)=>previousValue+currentValue.exercises, 0);
+
+    console.log(totalCount);
+
     let total = 0
-    props.parts.forEach(value => {
+    parts.forEach(value => {
         total += value.exercises
     })
     return (
         <>
-            <strong>total of exercises {total}</strong>
+            <strong>total of exercises {totalCount}</strong>
         </>
     );
 }
