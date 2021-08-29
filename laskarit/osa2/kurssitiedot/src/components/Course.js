@@ -4,7 +4,7 @@ const Header = ({name}) => {
     console.log(name)
     return(
         <>
-        <h1>{name}</h1>
+        <h2>{name}</h2>
         </>
     );
 }
@@ -14,7 +14,7 @@ const Content = ({parts}) => {
    return(
       <div>
         {parts.map(part =>
-            <Part part={part} />
+            <Part key={part.id} part={part} />
         )}
     </div>
   )
@@ -34,10 +34,6 @@ const Total = ({parts}) => {
 
     console.log(totalCount);
 
-    let total = 0
-    parts.forEach(value => {
-        total += value.exercises
-    })
     return (
         <>
             <strong>total of exercises {totalCount}</strong>
