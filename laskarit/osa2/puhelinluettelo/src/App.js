@@ -16,14 +16,27 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: newName,
-      id: persons.length + 1,
+    let pos = -1
+
+    persons.forEach(function(item, index, array) {
+      console.log(item, index)
+      if (item.name === newName) {
+        pos = index
+      }
+    })
+    console.log(newName, pos)
+    if (pos >= 0) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      const personObject = {
+        name: newName,
+        id: persons.length + 1,
+      }
+   
+      setPersons(persons.concat(personObject))
+      setNewName('')
     }
-  
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    }
+}
 
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -43,7 +56,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
          {persons.map(person => 
-          <Person key={person.id} person={person} />
+          <Person key={person.name} person={person} />
         )}
     </div>
   )
