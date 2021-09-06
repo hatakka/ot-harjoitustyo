@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
-const Person = ({person}) => {
-  return (
-    <div>
-      {person.name}&nbsp;{person.number}
-    </div>
-  );
-}
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -20,11 +16,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [filterNumbers, setFilter] = useState('')
 
-  const personsToShow = filterNumbers.length === 0
-    ? persons
-    : persons.filter(person => person.name.toLowerCase().includes(filterNumbers.toLowerCase()))
-
-  const filterChange= (event) => {
+  const filterChange = (event) => {
     console.log(event.target.value)
     setFilter(event.target.value)
   }
@@ -51,7 +43,7 @@ const App = () => {
       setNewName('')
       setNewNumber('')
      }
-}
+  }
 
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -66,24 +58,16 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-          filter shown with <input value={filterNumbers} onChange={filterChange} />
-      </div>
+        <Filter key="filter" filterNumbers={filterNumbers} filterChange={filterChange} />
       <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} /></div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+        <PersonForm key="personForm" 
+          addPerson={addPerson} 
+          newName={newName} 
+          handleNameChange={handleNameChange} 
+          newNumber={newNumber} 
+          handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-        {personsToShow.map(person =>
-          <Person key={person.name} person={person} />
-        )}
+        <Persons key="persons" persons={persons} filterNumbers={filterNumbers} />
     </div>
   )
 
