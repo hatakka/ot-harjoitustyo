@@ -1,62 +1,45 @@
 import React from 'react'
 
-const Country = ({country}) => {
+const Country = ({country, handleClick}) => {
+  console.log("Params ", country, handleClick)
     return (
       <div>
         {country.name}
+        <Button key={country.name} handleClick={handleClick} country={country} />
       </div>
     );
   }
   
-  const CountryDetails = ({country}) => {
-    return (
-      <>
-        <h1>{country.name}</h1>
-        <div>capital {country.capital}</div>
-        <div>population {country.population}</div>
-        <h2>languages</h2>
-        <div>
-          <ul>
-            {country.languages.map(language =>
-              <li>{language.name}</li>
-            )}
-          </ul>
-        </div>
-        <div>
-          <img src={country.flag} alt="The flag of the country" width="100px" height="100px" align="left"/>
-        </div>
-      </>
-    );
-  }
+const Button = ({handleClick, country}) => {
+  return (
+    <>
+      <button onClick={() => handleClick(country={country})}>show</button> 
+    </>
+  )   
+}
   
-const Countries = ({countries, filterCountries}) => {
-    const countriesToShow = filterCountries.length === 0
-    ? countries
-    : countries.filter(country => country.name.toLowerCase().includes(filterCountries.toLowerCase()))
-    if (countriesToShow.length > 10) {
+const Countries = ({countries, setCountryToShow}) => {
+ 
+    if (countries.length > 10) {
       return (
         <>
           Too many matches, specify another filter
         </>
       )
-
-    } else if (countriesToShow.length === 1) {
+    } else if (countries.length > 1) {
       return (
         <>
-            {countriesToShow.map(country =>
-                <CountryDetails key={country.name} country={country} />
-          )}
+          {countries.map(country => (
+            <Country key={country.name} country = {country} handleClick={setCountryToShow}/>
+            ))}
         </>
       )
     } else {
-
       return (
-          <>
-            {countriesToShow.map(country =>
-                <Country key={country.name} country={country} />
-            )}
-          </>
-      )
+        <>
+          No matches, specify another filter
+        </>
+      )     
     }
 }
 
