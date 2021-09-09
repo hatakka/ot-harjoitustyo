@@ -37,7 +37,6 @@ const Countries = ({countries, setCountryToShow}) => {
     } else {
       return (
         <>
-          No matches, specify another filter
         </>
       )     
     }

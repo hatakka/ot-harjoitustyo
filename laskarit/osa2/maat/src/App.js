@@ -8,6 +8,9 @@ function App() {
   const [countries, setCountries] = useState([])
   const [filterCountries, setFilter] = useState('')
   const [countryToShow, setCountry] = useState(null)
+  const [weather, setWeather] = useState(null) 
+
+  let detailedCountry = countryToShow;
 
   useEffect(() => {
     console.log('effect')
@@ -18,11 +21,24 @@ function App() {
       })
   }, [])
 
+  useEffect(() => {
+    if (countryToShow != null) {
+      const capital = countryToShow.capital
+      const api_key = process.env.REACT_APP_API_KEY
+      console.log('weather effect for ', capital)
+      const url = 'http://api.weatherstack.com/current?access_key=' + api_key + '&query='+ capital
+       axios
+          .get(url)
+          .then(response => {
+            setWeather(response.data)
+          })
+        }
+    }, [countryToShow])
+
+
   const countriesToShow = filterCountries.length === 0
   ? countries
   : countries.filter(country => country.name.toLowerCase().includes(filterCountries.toLowerCase()))
-
-  let detailedCountry = countryToShow;
 
   const setCountryToShow = ({country}) => {
     console.log(country)
@@ -41,13 +57,22 @@ function App() {
     detailedCountry = country;
   }
 
-  return (
-    <div className="App">
-        <Filter key="filter" filterCountries={filterCountries} filterChange={filterChange} />
-        <Countries key="countries" countries={countriesToShow} setCountryToShow={setCountryToShow} />
-        <CountryDetails key="countryDetails" country={detailedCountry} /> 
-  </div>
-  );
+  if (detailedCountry != null) {
+    return (
+      <div className="App">
+          <Filter key="filter" filterCountries={filterCountries} filterChange={filterChange} />
+          <Countries key="countries" countries={countriesToShow} setCountryToShow={setCountryToShow} />
+          <CountryDetails key="countryDetails" country={detailedCountry} weather={weather}/> 
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+          <Filter key="filter" filterCountries={filterCountries} filterChange={filterChange} />
+          <Countries key="countries" countries={countriesToShow} setCountryToShow={setCountryToShow} />
+      </div>
+    );
+  }
 }
 
 export default App;
