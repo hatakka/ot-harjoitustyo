@@ -22,18 +22,26 @@ function App() {
   }, [])
 
   useEffect(() => {
+    let capital = null
     if (countryToShow != null) {
-      const capital = countryToShow.capital
+       capital = countryToShow.capital
+    } else if (filterCountries.length != 0) {
+      const filtered = countries.filter(country => country.name.toLowerCase().includes(filterCountries.toLowerCase()))
+      if (filtered.length === 1) {
+        capital = filtered[0].capital
+      }
+    }
+    if (capital != null) {
       const api_key = process.env.REACT_APP_API_KEY
       console.log('weather effect for ', capital)
       const url = 'http://api.weatherstack.com/current?access_key=' + api_key + '&query='+ capital
-       axios
-          .get(url)
-          .then(response => {
-            setWeather(response.data)
-          })
-        }
-    }, [countryToShow])
+      axios
+        .get(url)
+        .then(response => {
+          setWeather(response.data)
+        })
+    }
+  }, [countryToShow, filterCountries])
 
 
   const countriesToShow = filterCountries.length === 0
