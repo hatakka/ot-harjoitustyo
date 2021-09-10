@@ -1,14 +1,15 @@
 import React from 'react'
 
-const Person = ({person}) => {
+const Person = ({person, removePerson}) => {
     return (
       <div>
         {person.name}&nbsp;{person.number}
+        <button onClick={removePerson}>delete</button>
       </div>
     );
   }
   
-const Persons = ({persons, filterNumbers}) => {
+const Persons = ({persons, filterNumbers, removePerson}) => {
     const personsToShow = filterNumbers.length === 0
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filterNumbers.toLowerCase()))
@@ -17,7 +18,7 @@ const Persons = ({persons, filterNumbers}) => {
     return (
         <>
             {personsToShow.map(person =>
-                <Person key={person.name} person={person} />
+                <Person key={person.name} person={person} removePerson={() => removePerson(person.name)}/>
         )}
         </>
     )

@@ -48,6 +48,25 @@ const App = () => {
     }
   }
 
+  const removePerson = (name) => {
+    const person = persons.find(n => n.name === name)
+    const id = person.id
+
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .remove(person.id)
+        .then(response => {
+          setPersons(persons.filter(n => n.id !== id))
+        })
+        .catch(error => {
+          alert(
+            `the person '${person.name}' was already deleted from server`
+          )
+          setPersons(persons.filter(n => n.id !== id))
+        })
+    }
+  }
+  
   const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
@@ -57,6 +76,7 @@ const App = () => {
     console.log(event.target.value)
     setNewNumber(event.target.value)
   }
+
   console.log(filterNumbers)
   return (
     <div>
@@ -70,7 +90,8 @@ const App = () => {
           newNumber={newNumber} 
           handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-        <Persons key="persons" persons={persons} filterNumbers={filterNumbers} />
+        <Persons key="persons" persons={persons} filterNumbers={filterNumbers} 
+            removePerson={removePerson} />
     </div>
   )
 
