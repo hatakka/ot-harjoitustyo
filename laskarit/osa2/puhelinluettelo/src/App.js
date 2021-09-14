@@ -48,7 +48,9 @@ const App = () => {
         personService
           .update(id, changedPerson)
           .then(response => {
-            setPersons(persons.map(person => person.id !== id ? person : response.data))
+            const newMap = persons.map(p => p.id !== id ? p : response)
+            setPersons(newMap)
+            setMessage(notification)
             setNewName('')
             setNewNumber('')  
           })
@@ -58,6 +60,7 @@ const App = () => {
               message: `The person '${person.name}' was already deleted from server`
             }
             setPersons(persons.filter(p => p.id !== id))
+            setMessage(notification)
           })
       }
     } else {
@@ -75,17 +78,16 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setMessage(notification)
           setNewName('')
           setNewNumber('')
        })
     }
-    setMessage(notification)
   }
 
-  const removePerson = (name) => {
-    const person = persons.find(n => n.name === name)
-    const id = person.id
+  const removePerson = (person) => {
 
+    const id = person.id
     notification = {
       level: 'info',
       message: `'${person.name}' removed`
@@ -96,6 +98,7 @@ const App = () => {
         .remove(person.id)
         .then(response => {
           setPersons(persons.filter(n => n.id !== id))
+          setMessage(notification)
         })
         .catch(error => {
           notification = {
@@ -103,9 +106,9 @@ const App = () => {
             message: `The person '${person.name}' was already deleted from server`
           }
          setPersons(persons.filter(n => n.id !== id))
+         setMessage(notification)
         })
     }
-    setMessage(notification)
   }
   
   const handleNameChange = (event) => {

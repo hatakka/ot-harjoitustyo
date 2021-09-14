@@ -18,7 +18,7 @@ const Persons = ({persons, filterNumbers, removePerson}) => {
     return (
         <>
             {personsToShow.map(person =>
-                <Person key={person.name} person={person} removePerson={() => removePerson(person.name)}/>
+                <Person key={person.name} person={person} removePerson={() => removePerson(person)}/>
         )}
         </>
     )
