@@ -1,0 +1,27 @@
+{
+  "name": "osa3_backend",
+  "version": "0.0.1",
+  "description": "Backend exercises part 3",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hatakka/ot-harjoitustyo.git"
+  },
+  "author": "Taina Hatakka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hatakka/ot-harjoitustyo/issues"
+  },
+  "homepage": "https://github.com/hatakka/ot-harjoitustyo#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
