@@ -1,10 +1,13 @@
 const http = require('http')
 const express = require('express')
+const morgan = require('morgan')
+
 const app = express()
 
 const max = 1000
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
   {
