@@ -1,13 +1,37 @@
 const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
+const { ppid } = require('process')
+
+morgan.token('body', function (req, res) {
+  if (req.method === 'POST') {
+    return JSON.stringify(req.body)
+  } else {
+    return ""
+  }
+})
 
 const app = express()
 
 const max = 1000
 
 app.use(express.json())
-app.use(morgan('tiny'))
+
+function postRequests(req, res) {
+  return req.method === 'POST'
+}
+
+function noPostRequests(req, res) {
+  return req.method != 'POST'
+}
+
+app.use(morgan('tiny', {
+  skip: postRequests
+}))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body', {
+  skip: noPostRequests
+}))
 
 let persons = [
   {
@@ -74,10 +98,8 @@ const generateId = () => {
   let id = Math.floor(Math.random() * max)
 
   while (findPerson(Math.floor(Math.random() * max)) != null) {
-    console.log(`Id already in use ${id}`)
-    id = Math.floor(Math.random() * max)
+   id = Math.floor(Math.random() * max)
   }
-  console.log(`New id found ${id}`)
   return id
 }
 
