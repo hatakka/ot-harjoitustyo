@@ -3,7 +3,8 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 
-app.use(express.static('build'))
+const app = express()
+
 app.use(cors())
 app.use(express.json())
 
@@ -14,8 +15,6 @@ morgan.token('body', function (req, res) {
     return ""
   }
 })
-
-const app = express()
 
 const max = 1000
 
