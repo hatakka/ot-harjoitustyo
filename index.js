@@ -3,6 +3,10 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 
+app.use(express.static('build'))
+app.use(cors())
+app.use(express.json())
+
 morgan.token('body', function (req, res) {
   if (req.method === 'POST') {
     return JSON.stringify(req.body)
@@ -14,9 +18,6 @@ morgan.token('body', function (req, res) {
 const app = express()
 
 const max = 1000
-
-app.use(cors())
-app.use(express.json())
 
 function postRequests(req, res) {
   return req.method === 'POST'
