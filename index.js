@@ -1,9 +1,10 @@
 const http = require('http')
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-
 const app = express()
+const Mate = require('./models/mate')
 
 app.use(express.static('build'))
 app.use(cors())
@@ -35,61 +36,54 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
   skip: noPostRequests
 }))
 
-let persons = [
-  {
-    "id": 1,
-    "name": "Arto Hellas",
-    "number": "040-123456"
-  },
-  {
-    "id": 2,
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523"
-  },
-  {
-    "id": 3,
-    "name": "Dan Abramov",
-    "number": "12-43-234345"
-  },
-  {
-    "id": 4,
-    "name": "Mary Poppendick",
-    "number": "39-23-6423122"
-  }
-]
 
-app.get('/info', (req, res) => {
-  res.send(`<div>Phonebook has info for ${persons.length} people</div><br/>${new Date()}`)
+app.get('/info', (request, response) => {
+  Mate.find({}).then(mates => {
+    response.send(`<div>Phonebook has info for ${mates.length} people</div><br/>${new Date()}`)
+
+//    response.json(mates)
+  })
 })
 
-app.get('/api/persons', (req, res) => {
-  res.json(persons)
+app.get('/api/persons', (request, response) => {
+  Mate.find({}).then(mates => {
+    response.json(mates)
+  })
+//  res.json(persons)
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
-  
+  Mate.findById(request.params.id).then(mate => {
+    response.json(mate)
+  })
+/*  
   if (person) {
     response.json(person)
   } else {
     response.status(404).end()
   }
+*/
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
-  
-  if (person) {
+  let mateToDelete = null
+
+  Mate.findByIdAndDelete(request.params.id).then(mate => {
+    response.json(mate)
+  })
+
+  /*
+  if (mateToDelete) {
     persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
   } else {
     response.status(404).end()
   }
+  */
 })
 
+/*
 const generateId = () => {
 
   let id = Math.floor(Math.random() * max)
@@ -104,6 +98,7 @@ const findPerson = (id) => {
   const person = persons.find(person => person.id === id)	
   return person
 }
+*/
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -113,23 +108,21 @@ app.post('/api/persons', (request, response) => {
       error: 'content missing' 
     })
   } 
-  const exists = persons.find(person => person.name === body.name)	
-
-  if (exists != null) {
+/*
+  Mate.find({ name: body.name }).then(mate => {
     return response.status(409).json({ 
       error: 'name must be unique' 
-    })
-  }
-    
-  const person = {
-    id: generateId(),
+   })
+  })
+*/
+  const mate = new Mate({
     name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  mate.save().then(savedMate => {
+    response.json(savedMate)
+  })
 })
 
 const unknownEndpoint = (request, response) => {
@@ -138,7 +131,8 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
+// const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
