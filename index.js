@@ -20,28 +20,26 @@ morgan.token('body', function (req, res) {
 
 const max = 1000
 
-function postRequests(req, res) {
-  return req.method === 'POST'
+function requestsWithBody(req, res) {
+  return (req.method === 'POST' || req.method === 'PUT')
 }
 
-function noPostRequests(req, res) {
-  return req.method != 'POST'
+function requestsNoBody(req, res) {
+  return (req.method != 'POST' && req.method != 'PUT')
 }
 
 app.use(morgan('tiny', {
-  skip: postRequests
+  skip: requestsWithBody
 }))
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body', {
-  skip: noPostRequests
+  skip: requestsNoBody
 }))
 
 
 app.get('/info', (request, response) => {
   Mate.find({}).then(mates => {
     response.send(`<div>Phonebook has info for ${mates.length} people</div><br/>${new Date()}`)
-
-//    response.json(mates)
   })
 })
 
@@ -49,56 +47,29 @@ app.get('/api/persons', (request, response) => {
   Mate.find({}).then(mates => {
     response.json(mates)
   })
-//  res.json(persons)
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   Mate.findById(request.params.id).then(mate => {
-    response.json(mate)
+    if (mate) {
+      response.json(mate)
+    } else {
+      response.status(404).end()
+    }
   })
-/*  
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
-*/
+  .catch(error => next(error))
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  let mateToDelete = null
-
+app.delete('/api/persons/:id', (request, response, next) => {
   Mate.findByIdAndDelete(request.params.id).then(mate => {
-    response.json(mate)
+    if (mate) {
+      response.status(204).end()
+    } else {
+      response.status(404).end()
+    }
   })
-
-  /*
-  if (mateToDelete) {
-    persons = persons.filter(person => person.id !== id)
-
-    response.status(204).end()
-  } else {
-    response.status(404).end()
-  }
-  */
+  .catch(error => next(error))
 })
-
-/*
-const generateId = () => {
-
-  let id = Math.floor(Math.random() * max)
-
-  while (findPerson(Math.floor(Math.random() * max)) != null) {
-   id = Math.floor(Math.random() * max)
-  }
-  return id
-}
-
-const findPerson = (id) => {
-  const person = persons.find(person => person.id === id)	
-  return person
-}
-*/
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -108,13 +79,7 @@ app.post('/api/persons', (request, response) => {
       error: 'content missing' 
     })
   } 
-/*
-  Mate.find({ name: body.name }).then(mate => {
-    return response.status(409).json({ 
-      error: 'name must be unique' 
-   })
-  })
-*/
+
   const mate = new Mate({
     name: body.name,
     number: body.number,
@@ -125,14 +90,46 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({ 
+      error: 'content missing' 
+    })
+  } 
+
+  const mate = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Mate.findByIdAndUpdate(request.params.id, mate, { new: true })
+    .then(updatedMate => {
+      response.json(updatedMate)
+    })
+    .catch(error => next(error))
+})
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
+
 const PORT = process.env.PORT
-// const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
