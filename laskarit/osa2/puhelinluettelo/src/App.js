@@ -82,7 +82,15 @@ const App = () => {
           setNewName('')
           setNewNumber('')
        })
-    }
+       .catch(error => {
+          console.log(error)
+          notification = {
+            level: 'error',
+            message: `Unable to add a new person: '${error.response.data.error}'`
+          }
+          setMessage(notification)
+        })
+      }
   }
 
   const removePerson = (person) => {
