@@ -19,21 +19,19 @@ blogsRouter.get('/:id', (request, response, next) => {
   .catch(error => next(error))
 })
 */
-  
-blogsRouter.post('/', (request, response, next) => {
-  const body = request.body
 
+blogsRouter.post('/', (request, response, next) => {
   console.log(request.body)
-  
+
   const blog = new Blog(request.body)
   /*
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: 0, 
+    likes: 0,
   })
- */ 
+ */
   blog.save().then(savedBlog => {
     response.json(savedBlog.toJSON())
   })
