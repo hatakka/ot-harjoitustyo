@@ -1,5 +1,16 @@
 const listHelper = require('../utils/list_helper')
 
+const listWithOneBlog = [
+  {
+    _id: '5a422aa71b54a676234d17f8',
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes: 5,
+    __v: 0
+  }
+]
+
 const blogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -56,17 +67,6 @@ test('dummy returns one', () => {
 })
 
 describe('total likes', () => {
-  const listWithOneBlog = [
-    {
-      _id: '5a422aa71b54a676234d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    }
-  ]
-
   test('of empty list is zero', () => {
     expect(listHelper.totalLikes([])).toBe(0)
   })
@@ -79,5 +79,21 @@ describe('total likes', () => {
   test('of a bigger list is calculated right', () => {
     const result = listHelper.totalLikes(blogs)
     expect(result).toBe(36)
+  })
+})
+
+describe('highest likes', () => {
+  test('of empty list is NaN', () => {
+    expect(listHelper.favoriteBlog([])).toEqual(NaN)
+  })
+
+  test('when list has only one blog equals the only blog in it', () => {
+    const result = listHelper.favoriteBlog(listWithOneBlog)
+    expect(result).toEqual(listWithOneBlog[0])
+  })
+
+  test('when list has multiple blogs', () => {
+    const result = listHelper.favoriteBlog(blogs)
+    expect(result).toEqual(blogs[2])
   })
 })
