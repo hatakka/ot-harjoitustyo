@@ -97,3 +97,41 @@ describe('highest likes', () => {
     expect(result).toEqual(blogs[2])
   })
 })
+
+describe('most blogs', () => {
+  test('of empty list is NaN', () => {
+    expect(listHelper.mostBlogs([])).toEqual(NaN)
+  })
+
+  test('when list has only one blog equals the only author in it', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result.author).toBe(listWithOneBlog[0].author)
+    expect(result.blogs).toBe(1)
+
+  })
+
+  test('when list has multiple blogs', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result.author).toBe('Robert C. Martin')
+    expect(result.blogs).toBe(3)
+  })
+})
+
+describe('most likes', () => {
+  test('of empty list is NaN', () => {
+    expect(listHelper.mostLikes([])).toEqual(NaN)
+  })
+
+  test('when list has only one blog equals the only author in it', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result.author).toBe(listWithOneBlog[0].author)
+    expect(result.likes).toBe(5)
+
+  })
+
+  test('when list has multiple blogs', () => {
+    const result = listHelper.mostLikes(blogs)
+    expect(result.author).toBe('Edsger W. Dijkstra')
+    expect(result.likes).toBe(17)
+  })
+})
